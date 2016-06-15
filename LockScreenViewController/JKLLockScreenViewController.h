@@ -29,7 +29,12 @@ typedef NS_ENUM(NSInteger, LockScreenMode) {
 /**
  *  Tint color for the buttons
  */
-@property (nonatomic, weak) UIColor *tintColor;
+@property (nonatomic, strong) UIColor *tintColor;
+@property (nonatomic, strong) UIColor *backgroundColor;
+@property (nonatomic, strong) UIColor *textTintColor;
+@property (nonatomic, strong) UIColor *textColor;
+
++(JKLLockScreenViewController*)instantiateViewController;
 
 @end
 
@@ -46,4 +51,5 @@ typedef NS_ENUM(NSInteger, LockScreenMode) {
 - (BOOL)lockScreenViewController:(JKLLockScreenViewController *)lockScreenViewController pincode:(NSString *)pincode;
 @optional
 - (BOOL)allowTouchIDLockScreenViewController:(JKLLockScreenViewController *)lockScreenViewController;
+- (BOOL)isCancelButtonVisible:(JKLLockScreenViewController *)lockScreenViewController andMode:(LockScreenMode)mode;
 @end

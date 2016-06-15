@@ -33,14 +33,28 @@ static const NSTimeInterval LSVShakeAnimationDuration = 0.5f;
 
 @implementation JKLLockScreenViewController
 
++(JKLLockScreenViewController*)instantiateViewController{
+    
+    
+    NSBundle *bundle = [NSBundle bundleForClass:[JKLLockScreenViewController class]];
+    JKLLockScreenViewController *vc = [[JKLLockScreenViewController alloc] initWithNibName:NSStringFromClass([JKLLockScreenViewController class]) bundle:bundle];
+    vc.backgroundColor = [UIColor whiteColor];
+    vc.tintColor = [UIColor colorWithRed:0.0 green:0.003 blue:0.6097 alpha:1.0];
+    vc.textColor = [UIColor blackColor];
+    vc.textTintColor = [UIColor whiteColor];
+    
+    return vc;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [_cancelButton setTitle:NSLocalizedStringFromTable(@"Cancel", @"JKLockScreen", nil) forState:UIControlStateNormal];
+    [_deleteButton setTitle:NSLocalizedStringFromTable(@"Delete", @"JKLockScreen", nil) forState:UIControlStateNormal];
     
     switch (_lockScreenMode) {
         case LockScreenModeVerification:
         case LockScreenModeNormal: {
-            // [일반 모드] Cancel 버튼 감춤
-            [_cancelButton setHidden:YES];
         }
         case LockScreenModeNew: {
             // [신규 모드]
@@ -55,8 +69,11 @@ static const NSTimeInterval LSVShakeAnimationDuration = 0.5f;
                          subtitle:NSLocalizedStringFromTable(@"New Pincode Subtitle", @"JKLockScreen", nil)];
             break;
     }
+    if ([_delegate respondsToSelector:@selector(isCancelButtonVisible:andMode:)]) {
+        [_cancelButton setHidden:![_dataSource isCancelButtonVisible:self andMode:_lockScreenMode]];
+    }
     
-    if (_tintColor) [self tintSubviewsWithColor:_tintColor];
+    [self tintSubviewsWithColor];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -77,14 +94,21 @@ static const NSTimeInterval LSVShakeAnimationDuration = 0.5f;
  *
  *  @param color tint color for buttons
  */
-- (void)tintSubviewsWithColor: (UIColor *) color{
-    [_cancelButton setTitleColor:color forState:UIControlStateNormal];
-    [_deleteButton setTitleColor:color forState:UIControlStateNormal];
-    [_pincodeView setPincodeColor:color];
+- (void)tintSubviewsWithColor{
+    [self.view setBackgroundColor:self.backgroundColor];
+    
+    [_titleLabel setTextColor:self.textColor];
+    [_subtitleLabel setTextColor:self.textColor];
+    
+    [_cancelButton setTitleColor:self.tintColor forState:UIControlStateNormal];
+    [_deleteButton setTitleColor:self.tintColor forState:UIControlStateNormal];
+    [_pincodeView setPincodeColor:self.tintColor];
     
     for (JKLLockScreenNumber * number in _numberButtons)
     {
-        [number setTintColor:color];
+        [number setTintColor:self.tintColor];
+        [number setTitleColor:self.textTintColor forState:UIControlStateHighlighted];
+        [number setTitleColor:self.textTintColor forState:UIControlStateHighlighted];
     }
 }
 
