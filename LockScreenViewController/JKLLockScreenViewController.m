@@ -73,6 +73,7 @@ static const NSTimeInterval LSVShakeAnimationDuration = 0.5f;
         [_cancelButton setHidden:![_dataSource isCancelButtonVisible:self andMode:_lockScreenMode]];
     }
     
+    [_deleteButton setEnabled:false];
     [self tintSubviewsWithColor];
 }
 
@@ -102,6 +103,7 @@ static const NSTimeInterval LSVShakeAnimationDuration = 0.5f;
     
     [_cancelButton setTitleColor:self.tintColor forState:UIControlStateNormal];
     [_deleteButton setTitleColor:self.tintColor forState:UIControlStateNormal];
+    [_deleteButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
     [_pincodeView setPincodeColor:self.tintColor];
     
     for (JKLLockScreenNumber * number in _numberButtons)
@@ -310,6 +312,7 @@ static const NSTimeInterval LSVShakeAnimationDuration = 0.5f;
     
     NSInteger number = [sender tag];
     [_pincodeView appendingPincode:[@(number) description]];
+    [_deleteButton setEnabled:([[_pincodeView  pincode] length]>0)];
 }
 
 - (IBAction)onCancelClicked:(id)sender {
@@ -324,6 +327,7 @@ static const NSTimeInterval LSVShakeAnimationDuration = 0.5f;
 - (IBAction)onDeleteClicked:(id)sender {
     
     [_pincodeView removeLastPincode];
+    [_deleteButton setEnabled:([[_pincodeView pincode] length]>0)];
 }
 
 #pragma mark -

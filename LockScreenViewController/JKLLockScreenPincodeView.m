@@ -10,8 +10,6 @@ static const NSUInteger LSPMaxPincodeLength = 4;
     NSUInteger _wasCompleted;
 }
 
-@property (nonatomic, strong) NSString * pincode;
-
 @end
 
 @implementation JKLLockScreenPincodeView
@@ -73,11 +71,11 @@ static const NSUInteger LSPMaxPincodeLength = 4;
  @param NSString PIN code
  */
 - (void)appendingPincode:(NSString *)pincode {
-
+    
     if (!_enabled) return;
-
+    
     NSString * appended = [_pincode stringByAppendingString:pincode];
-
+    
     // 최대 자릿수를 넘는다면 최대 자릿수만큼만 설정
     NSUInteger length = MIN([appended length], LSPMaxPincodeLength);
     self.pincode = [appended substringToIndex:length];
